@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DualPantoFramework;
 
@@ -10,6 +7,8 @@ public class PlayerScript : MonoBehaviour
     private PantoHandle _meHandle;
     private GameObject _player;
     private GameObject _weapon;
+
+    private bool _isSwitchDone;
     
     // Start is called before the first frame update
     async void Start()
@@ -20,16 +19,16 @@ public class PlayerScript : MonoBehaviour
 
         await _meHandle.SwitchTo(_player);
         _meHandle.Free();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
+        InitializeWorld.CreateWalls();
         
+        _isSwitchDone = true;
     }
 
     private void FixedUpdate()
     {
+        if (!_isSwitchDone) return;
+
         transform.position = _meHandle.HandlePosition(transform.position);
         PositionWeapon();
     }
