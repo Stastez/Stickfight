@@ -3,13 +3,10 @@ using DualPantoFramework;
 
 public class PlayerScript : MonoBehaviour
 {
-
     private PantoHandle _meHandle;
     private GameObject _player;
     private GameObject _weapon;
 
-    private bool _isSwitchDone;
-    
     // Start is called before the first frame update
     async void Start()
     {
@@ -17,18 +14,15 @@ public class PlayerScript : MonoBehaviour
         _player = GameObject.Find("Player");
         _weapon = GameObject.Find("PlayerWeapon");
 
-        await _meHandle.SwitchTo(_player);
+        await _meHandle.MoveToPosition(_player.transform.position);
+        
         _meHandle.Free();
 
-        InitializeWorld.CreateWalls();
-        
-        _isSwitchDone = true;
+        //InitializeWorld.CreateWalls();
     }
 
     private void FixedUpdate()
     {
-        if (!_isSwitchDone) return;
-
         transform.position = _meHandle.HandlePosition(transform.position);
         PositionWeapon();
     }
