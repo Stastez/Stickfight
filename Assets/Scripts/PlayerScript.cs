@@ -29,6 +29,7 @@ public class PlayerScript : MonoBehaviour
     {
         const float horizontalWeaponDistance = 0.75f;
         const float verticalWeaponDistance = 0.33f;
+        const float weaponHeight = 0f;
         var handleRotation = _meHandle.GetRotation();
 
         const float weaponRotation = 25f;
@@ -41,27 +42,27 @@ public class PlayerScript : MonoBehaviour
         {
             case >= 0 and < 60:
                 _weapon.transform.eulerAngles = up;
-                _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, 0.25f, verticalWeaponDistance);
+                _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, verticalWeaponDistance);
                 break;
             case >= 60 and < 120:
                 _weapon.transform.eulerAngles = middle;
-                _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, 0.25f, 0);
+                _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, 0);
                 break;
             case >= 120 and < 180:
                 _weapon.transform.eulerAngles = down;
-                _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, 0.25f, -verticalWeaponDistance);
+                _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, -verticalWeaponDistance);
                 break;
             case >= 180 and < 240:
                 _weapon.transform.eulerAngles = -down;
-                _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, 0.25f, -verticalWeaponDistance);
+                _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, weaponHeight, -verticalWeaponDistance);
                 break;
             case >= 240 and < 300:
                 _weapon.transform.eulerAngles = middle;
-                _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, 0.25f, 0);
+                _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, weaponHeight, 0);
                 break;
             case >= 300 and < 360:
                 _weapon.transform.eulerAngles = -up;
-                _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, 0.25f, verticalWeaponDistance);
+                _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, weaponHeight, verticalWeaponDistance);
                 break;
         }
     }
