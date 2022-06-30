@@ -32,12 +32,17 @@ public class PlayerScript : MonoBehaviour
         _player = GameObject.Find("Player");
         _weapon = GameObject.Find("PlayerWeapon");
 
+        //await _meHandle.SwitchTo(_player);
+        
         InitializeWorld.CreateWalls();
     }
 
     private void FixedUpdate()
     {
-        transform.position = _meHandle.HandlePosition(transform.position);
+        var currentHandlePosition = _meHandle.HandlePosition(transform.position);
+        //currentHandlePosition.z = transform.position.z;
+        
+        transform.position = currentHandlePosition;
         PositionWeapon();
     }
     
