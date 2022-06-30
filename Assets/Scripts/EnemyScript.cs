@@ -8,6 +8,9 @@ public class EnemyScript : MonoBehaviour
     private Vector3 _oldPosition;
     private float _oldRotation;
 
+    public PlayerScript.WeaponPosition weaponPosition;
+    public PlayerScript.WeaponSide weaponSide;
+
     // Start is called before the first frame update
     async void Start()
     {
@@ -42,19 +45,27 @@ public class EnemyScript : MonoBehaviour
         var middle = new Vector3(0, 0, 0);
         var down = new Vector3(0, weaponRotation, 0);
 
+        weaponSide = playerIsLeftOfEnemy ? PlayerScript.WeaponSide.Left : PlayerScript.WeaponSide.Right;
+
         switch (handleRotation)
         {
             case (>= 0 and < 60) or (>= 300 and < 360):
                 _weapon.transform.eulerAngles = up;
                 _weapon.transform.position = _enemy.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, verticalWeaponDistance);
+
+                weaponPosition = PlayerScript.WeaponPosition.Up;
                 break;
             case (>= 60 and < 120) or (>= 240 and < 300):
                 _weapon.transform.eulerAngles = middle;
                 _weapon.transform.position = _enemy.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, 0);
+                
+                weaponPosition = PlayerScript.WeaponPosition.Middle;
                 break;
             case (>= 120 and < 180) or (>= 180 and < 240):
                 _weapon.transform.eulerAngles = down;
                 _weapon.transform.position = _enemy.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, -verticalWeaponDistance);
+                
+                weaponPosition = PlayerScript.WeaponPosition.Down;
                 break;
         }
     }
