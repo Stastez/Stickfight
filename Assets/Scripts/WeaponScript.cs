@@ -33,6 +33,7 @@ public class WeaponScript : MonoBehaviour
         {
             _audioSource.PlayOneShot(enemyKilled);
             GameObject.Destroy(_enemy);
+            GameObject.Destroy(_enemyWeapon);
             Thread.Sleep((int) (enemyKilled.length * 1000));
             await _speech.Speak("You have slain your enemy!");
         }
