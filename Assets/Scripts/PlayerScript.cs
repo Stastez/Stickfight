@@ -14,11 +14,9 @@ public class PlayerScript : MonoBehaviour
         _player = GameObject.Find("Player");
         _weapon = GameObject.Find("PlayerWeapon");
 
-        await _meHandle.MoveToPosition(_player.transform.position);
-        
         _meHandle.Free();
 
-        //InitializeWorld.CreateWalls();
+        InitializeWorld.CreateWalls();
     }
 
     private void FixedUpdate()

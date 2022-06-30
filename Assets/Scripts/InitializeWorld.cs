@@ -15,6 +15,7 @@ public class InitializeWorld : MonoBehaviour
             _walls[i] = GameObject.Find("Walls").transform.GetChild(i).gameObject;
             _colliders[i] = _walls[i].GetComponent<PantoBoxCollider>();
             _colliders[i].CreateObstacle();
+            _colliders[i].Enable();
         }
     }
 }
