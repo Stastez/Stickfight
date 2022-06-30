@@ -8,13 +8,13 @@ public class PlayerScript : MonoBehaviour
     private GameObject _weapon;
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
+        await IntroductionHandler.Introduce();
+        
         _meHandle = GameObject.Find("Panto").GetComponent<UpperHandle>();
         _player = GameObject.Find("Player");
         _weapon = GameObject.Find("PlayerWeapon");
-
-        _meHandle.Free();
 
         InitializeWorld.CreateWalls();
     }
