@@ -23,13 +23,13 @@ public class IntroductionHandler : MonoBehaviour
 
     public static async Task Introduce(bool playIntro)
     {
-        if (playIntro) PlayIntro();
+        if (playIntro) await PlayIntro();
         
         await _meHandle.MoveToPosition(_player.transform.position);
         await _itHandle.SwitchTo(_enemy);
     }
 
-    private static async void PlayIntro()
+    private static async Task PlayIntro()
     {
         await _itHandle.MoveToPosition(_enemy.transform.position);
         await _meHandle.MoveToPosition(GameObject.Find("1TopLeft").transform.position);
