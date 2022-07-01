@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using DualPantoFramework;
 
@@ -6,7 +7,6 @@ public class EnemyScript : MonoBehaviour
     private PantoHandle _itHandle, _meHandle;
     private GameObject _enemy, _player, _weapon;
     private Vector3 _oldPosition;
-    private float _oldRotation;
 
     public PlayerScript.WeaponPosition weaponPosition;
     public PlayerScript.WeaponSide weaponSide;
@@ -16,10 +16,14 @@ public class EnemyScript : MonoBehaviour
     {
         FindGameObjects();
 
-        _itHandle.Free();
-        await _itHandle.SwitchTo(_enemy);
+        _oldPosition = _enemy.transform.position;
         
-        InvokeRepeating(nameof(PositionWeapon), 0, 2);
+        InvokeRepeating(nameof(RotateWeapon), 0, 2);
+    }
+
+    private void FixedUpdate()
+    {
+        PositionWeapon();
     }
 
     private void FindGameObjects()
@@ -31,7 +35,7 @@ public class EnemyScript : MonoBehaviour
         _weapon = GameObject.Find("EnemyWeapon");
     }
 
-    private void PositionWeapon()
+    private void RotateWeapon()
     {
         var playerIsLeftOfEnemy = _player.transform.position.x <= _enemy.transform.position.x;
         
@@ -68,5 +72,14 @@ public class EnemyScript : MonoBehaviour
                 weaponPosition = PlayerScript.WeaponPosition.Down;
                 break;
         }
+    }
+
+    private void PositionWeapon()
+    {
+        var enemyPosition = _enemy.transform.position;
+
+        _weapon.transform.position += new Vector3(0, 0, enemyPosition.z - _oldPosition.z);
+
+        _oldPosition = enemyPosition;
     }
 }
