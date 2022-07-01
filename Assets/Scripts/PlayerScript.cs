@@ -17,9 +17,9 @@ public class PlayerScript : MonoBehaviour
     }
     
     private PantoHandle _meHandle;
-    private GameObject _player;
-    private GameObject _weapon;
-
+    private GameObject _player, _weapon;
+    private bool _isIntroDone;
+    
     public WeaponPosition weaponPosition;
     public WeaponSide weaponSide;
 
@@ -32,16 +32,16 @@ public class PlayerScript : MonoBehaviour
         _player = GameObject.Find("Player");
         _weapon = GameObject.Find("PlayerWeapon");
 
-        //await _meHandle.SwitchTo(_player);
+        _isIntroDone = true;
         
         InitializeWorld.CreateWalls();
     }
 
     private void FixedUpdate()
     {
-        var currentHandlePosition = _meHandle.HandlePosition(transform.position);
-        //currentHandlePosition.z = transform.position.z;
+        if (!_isIntroDone) return;
         
+        var currentHandlePosition = _meHandle.HandlePosition(transform.position);
         transform.position = currentHandlePosition;
         PositionWeapon();
     }
