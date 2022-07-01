@@ -42,6 +42,9 @@ public class PlayerScript : MonoBehaviour
         if (!_isIntroDone) return;
         
         var currentHandlePosition = _meHandle.HandlePosition(transform.position);
+
+        currentHandlePosition.y = 1;
+        
         transform.position = currentHandlePosition;
         PositionWeapon();
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using DualPantoFramework;
+using SpeechIO;
 using UnityEngine;
 
 public class IntroductionHandler : MonoBehaviour
@@ -15,13 +16,23 @@ public class IntroductionHandler : MonoBehaviour
         LeftRight
     }
 
-    private static GameObject _panto = GameObject.Find("Panto"), _player = GameObject.Find("Player");
+    private static GameObject _panto = GameObject.Find("Panto"), _player = GameObject.Find("Player"), _enemy = GameObject.Find("Enemy");
     private static Level _level = _panto.GetComponent<Level>();
-    private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>();
+    private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(), _itHandle = _panto.GetComponent<LowerHandle>();
+    private static SpeechOut _speech = new();
 
     public static async Task Introduce()
     {
+        _speech.Speak("This person");
+
+        await _itHandle.MoveToPosition(_enemy.transform.position);
+
+        _speech.Speak("has farted in this closed off room!");
+        
         await _level.PlayIntroduction();
+
+        _speech.Speak("Kill them!");
+        
         await _meHandle.MoveToPosition(_player.transform.position);
         await Wiggle(_meHandle, WiggleDirection.Right, 0.25f, 1);
     }
