@@ -221,7 +221,7 @@ namespace DualPantoFramework
             return userControlledRotation;
         }
 
-        float MaxMovementSpeed()
+        public float MaxMovementSpeed()
         {
             return 1.5f;
         }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
+using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
 
@@ -9,7 +9,9 @@ public class WeaponScript : MonoBehaviour
     private GameObject _player, _ownGameObject, _enemy, _enemyWeapon;
     private SpeechOut _speech;
     private AudioSource _audioSource;
-    public AudioClip enemyKilled, enemyBlocked;
+    private PantoHandle _itHandle;
+    
+    public AudioClip enemyKilled, enemyBlocked, victory;
 
     private void Start()
     {
@@ -20,6 +22,7 @@ public class WeaponScript : MonoBehaviour
         _enemyWeapon = GameObject.Find("EnemyWeapon");
         _audioSource = _ownGameObject.GetComponent<AudioSource>();
         _player = GameObject.Find("Player");
+        _itHandle = GameObject.Find("Panto").GetComponent<LowerHandle>();
     }
 
     private async void OnCollisionEnter(Collision collision)
@@ -38,7 +41,9 @@ public class WeaponScript : MonoBehaviour
             GameObject.Destroy(_enemy);
             GameObject.Destroy(_enemyWeapon);
             Thread.Sleep((int) (enemyKilled.length * 1000));
-            await _speech.Speak("You have slain your enemy!");
+            _audioSource.PlayOneShot(victory, 0.25f);
+            _speech.Speak("You have slain your enemy!");
+            await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
         }
     }
 

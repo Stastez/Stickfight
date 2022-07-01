@@ -1,5 +1,8 @@
 using UnityEngine;
 using DualPantoFramework;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
+using Scene = UnityEngine.SceneManagement.Scene;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -17,30 +20,34 @@ public class PlayerScript : MonoBehaviour
     }
     
     private PantoHandle _meHandle;
-    private GameObject _player;
-    private GameObject _weapon;
+    private GameObject _player, _weapon;
 
+    public bool playIntro;
+    public bool isIntroDone;
     public WeaponPosition weaponPosition;
     public WeaponSide weaponSide;
 
     // Start is called before the first frame update
     async void Start()
     {
-        await IntroductionHandler.Introduce();
+        await IntroductionHandler.Introduce(playIntro);
         
         _meHandle = GameObject.Find("Panto").GetComponent<UpperHandle>();
         _player = GameObject.Find("Player");
         _weapon = GameObject.Find("PlayerWeapon");
 
-        //await _meHandle.SwitchTo(_player);
+        isIntroDone = true;
         
         InitializeWorld.CreateWalls();
     }
 
     private void FixedUpdate()
     {
+        if (!isIntroDone) return;
+        
         var currentHandlePosition = _meHandle.HandlePosition(transform.position);
-        //currentHandlePosition.z = transform.position.z;
+
+        currentHandlePosition.y = (SceneManager.GetActiveScene().name == "Level1") ? 0 : 1;
         
         transform.position = currentHandlePosition;
         PositionWeapon();

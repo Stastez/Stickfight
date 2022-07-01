@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class InitializeWorld : MonoBehaviour
 {
-
-    private static int wallCount = GameObject.Find("Walls").transform.childCount;
-    private static GameObject[] _walls = new GameObject[wallCount];
-    private static PantoBoxCollider[] _colliders = new PantoBoxCollider[wallCount];
-    
     public static void CreateWalls()
     {
+        var wallCount = GameObject.Find("Walls").transform.childCount;
+        var walls = new GameObject[wallCount];
+        var colliders = new PantoBoxCollider[wallCount];
+        
         for (var i = 0; i < wallCount; i++)
         {
-            _walls[i] = GameObject.Find("Walls").transform.GetChild(i).gameObject;
-            _colliders[i] = _walls[i].GetComponent<PantoBoxCollider>();
-            _colliders[i].CreateObstacle();
-            _colliders[i].Enable();
+            walls[i] = GameObject.Find("Walls").transform.GetChild(i).gameObject;
+            colliders[i] = walls[i].GetComponent<PantoBoxCollider>();
+            colliders[i].CreateObstacle();
+            colliders[i].Enable();
         }
     }
 }
