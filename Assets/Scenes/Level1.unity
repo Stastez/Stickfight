@@ -756,6 +756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyKilled: {fileID: 8300000, guid: e05b3e6419ad8df4eb66caec7d33ce67, type: 3}
   enemyBlocked: {fileID: 8300000, guid: ed6da40b98a81254b934e7d66235306b, type: 3}
+  victory: {fileID: 8300000, guid: 0d94b82710011ef46a41e74809a87e89, type: 3}
 --- !u!54 &685928284
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1503,6 +1504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f20d89455f496254a87967ae0a265742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playIntro: 0
+  isIntroDone: 0
   weaponPosition: 0
   weaponSide: 0
 --- !u!1 &1950126638

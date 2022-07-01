@@ -21,7 +21,15 @@ public class IntroductionHandler : MonoBehaviour
     private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(), _itHandle = _panto.GetComponent<LowerHandle>();
     private static SpeechOut _speech = new();
 
-    public static async Task Introduce()
+    public static async Task Introduce(bool playIntro)
+    {
+        if (playIntro) PlayIntro();
+        
+        await _meHandle.MoveToPosition(_player.transform.position);
+        await _itHandle.SwitchTo(_enemy);
+    }
+
+    private static async void PlayIntro()
     {
         await _itHandle.MoveToPosition(_enemy.transform.position);
         await _meHandle.MoveToPosition(GameObject.Find("1TopLeft").transform.position);
@@ -38,8 +46,6 @@ public class IntroductionHandler : MonoBehaviour
         
         await _meHandle.MoveToPosition(_player.transform.position);
         await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
-
-        await _itHandle.SwitchTo(_enemy);
     }
 
     /**
