@@ -23,11 +23,12 @@ public class IntroductionHandler : MonoBehaviour
 
     public static async Task Introduce()
     {
+        await _itHandle.MoveToPosition(_enemy.transform.position);
+        await _meHandle.MoveToPosition(GameObject.Find("1TopLeft").transform.position);
+        
         _speech.Speak("This individual");
-
-        //await _itHandle.MoveToPosition(_enemy.transform.position);
+        
         await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.5f);
-        await _itHandle.SwitchTo(_enemy);
 
         _speech.Speak("has farted in this closed off room!");
         
@@ -37,6 +38,8 @@ public class IntroductionHandler : MonoBehaviour
         
         await _meHandle.MoveToPosition(_player.transform.position);
         await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
+
+        await _itHandle.SwitchTo(_enemy);
     }
 
     /**
