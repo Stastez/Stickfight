@@ -35,6 +35,8 @@ namespace Level1
 
             await _meHandle.MoveToPosition(_player.transform.position);
             await _itHandle.SwitchTo(_enemy);
+            
+            //TODO: Freeze rotation of end effector
         }
 
         private static async Task PlayIntro()

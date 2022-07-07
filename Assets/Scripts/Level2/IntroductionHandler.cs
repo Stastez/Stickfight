@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using DualPantoFramework;
 using SpeechIO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Level2
@@ -18,17 +21,28 @@ namespace Level2
             LeftRight
         }
 
-        private static GameObject _panto = GameObject.Find("Panto"), _player = GameObject.Find("Player"), _enemy = GameObject.Find("Enemy");
-        private static Level _level = _panto.GetComponent<Level>();
-        private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(), _itHandle = _panto.GetComponent<LowerHandle>();
-        private static SpeechOut _speech = new();
+        private GameObject _panto, _player, _enemy;
+        private Level _level;
+        private PantoHandle _meHandle, _itHandle;
+        private SpeechOut _speech;
+
+        private void Start()
+        {
+            _panto = GameObject.Find("Panto");
+            _player = GameObject.Find("Player");
+            _enemy = GameObject.Find("Enemy");
+            _level = _panto.GetComponent<Level>();
+            _meHandle = _panto.GetComponent<UpperHandle>();
+            _itHandle = _panto.GetComponent<LowerHandle>();
+            _speech = new SpeechOut();
+        }
 
         private void OnApplicationQuit()
         {
             _speech.Stop();
         }
 
-        public static async Task Introduce(bool playIntro)
+        public async Task Introduce(bool playIntro)
         {
             if (playIntro) await PlayIntro();
             
@@ -36,24 +50,24 @@ namespace Level2
             await _itHandle.SwitchTo(_enemy);
         }
 
-        private static async Task PlayIntro()
+        private async Task PlayIntro()
         {
             await _itHandle.MoveToPosition(_enemy.transform.position);
             await _meHandle.MoveToPosition(_player.transform.position);
-            
-            _speech.Speak("You've got a sword!");
-            await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 0.25f);
 
-            _speech.Speak("Stab this guy!");
-            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.25f);
+            _player.GetComponent<PlayerScript>().isIntroDone = true;
+
+            _speech.Speak("You can rotate your weapon in six directions:");
+            StartCoroutine(nameof(Rotate), _meHandle);
+
+            _speech.Speak("Careful: your enemy can block you if their sword is in the opposite position!");
             
-            await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
         }
 
         /**
          * Max movement speed is 1.5f
          */
-        public static async Task Wiggle(PantoHandle handle, GameObject reference, WiggleDirection direction, float intensity, float extent)
+        public async Task Wiggle(PantoHandle handle, GameObject reference, WiggleDirection direction, float intensity, float extent)
         {
             Vector3 originalPosition = handle.HandlePosition(reference.transform.position);
 
@@ -90,6 +104,20 @@ namespace Level2
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
+        }
+
+        private IEnumerator Rotate(PantoHandle handle)
+        {
+            float[] rotations = {30, 90, 150, 210, 270, 330};
+            
+            foreach (float rotation in rotations)
+            {
+                if (handle.isFrozen)
+                    handle.Free();
+                
+                handle.Rotate(rotation);
+                yield return new WaitForSeconds(1);
             }
         }
     }

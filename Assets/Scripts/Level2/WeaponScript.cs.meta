@@ -1,3 +1,14 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 0fe806ce021c869439d19110fb6478ba
-timeCreated: 1656592055
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - enemyKilled: {fileID: 8300000, guid: e05b3e6419ad8df4eb66caec7d33ce67, type: 3}
+  - enemyBlocked: {fileID: 8300000, guid: ed6da40b98a81254b934e7d66235306b, type: 3}
+  - victory: {fileID: 8300000, guid: 0d94b82710011ef46a41e74809a87e89, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
