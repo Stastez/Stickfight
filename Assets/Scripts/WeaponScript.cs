@@ -25,6 +25,11 @@ public class WeaponScript : MonoBehaviour
         _itHandle = GameObject.Find("Panto").GetComponent<LowerHandle>();
     }
 
+    private void OnApplicationQuit()
+    {
+        _speech.Stop();
+    }
+
     private async void OnCollisionEnter(Collision collision)
     {
         GameObject collidedGameObject = collision.collider.gameObject;

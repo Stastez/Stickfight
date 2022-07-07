@@ -32,19 +32,14 @@ public class IntroductionHandler : MonoBehaviour
     private static async Task PlayIntro()
     {
         await _itHandle.MoveToPosition(_enemy.transform.position);
-        await _meHandle.MoveToPosition(GameObject.Find("1TopLeft").transform.position);
-        
-        _speech.Speak("This individual");
-        
-        await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.5f);
-
-        _speech.Speak("has farted in this closed off room!");
-        
-        await _level.PlayIntroduction();
-
-        _speech.Speak("Kill them!");
-        
         await _meHandle.MoveToPosition(_player.transform.position);
+        
+        _speech.Speak("You've got a sword!");
+        await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 0.5f);
+
+        _speech.Speak("Stab this guy!");
+        await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.5f);
+        
         await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
     }
 
@@ -89,5 +84,10 @@ public class IntroductionHandler : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        _speech.Stop();
     }
 }

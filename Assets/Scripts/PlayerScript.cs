@@ -1,8 +1,6 @@
 using UnityEngine;
 using DualPantoFramework;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
-using Scene = UnityEngine.SceneManagement.Scene;
 
 public class PlayerScript : MonoBehaviour
 {
