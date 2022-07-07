@@ -26,6 +26,8 @@ namespace Level2
         private PantoHandle _meHandle, _itHandle;
         private SpeechOut _speech;
 
+        private bool _initialized;
+
         private void Start()
         {
             _panto = GameObject.Find("Panto");
@@ -35,6 +37,8 @@ namespace Level2
             _meHandle = _panto.GetComponent<UpperHandle>();
             _itHandle = _panto.GetComponent<LowerHandle>();
             _speech = new SpeechOut();
+
+            _initialized = true;
         }
 
         private void OnApplicationQuit()
@@ -44,6 +48,8 @@ namespace Level2
 
         public async Task Introduce(bool playIntro)
         {
+            if (!_initialized) Start();
+            
             if (playIntro) await PlayIntro();
             
             await _meHandle.MoveToPosition(_player.transform.position);

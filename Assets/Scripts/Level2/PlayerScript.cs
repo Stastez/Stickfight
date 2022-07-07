@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using DualPantoFramework;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,7 @@ namespace Level2
         }
 
         public enum WeaponSide
-        {
+        { 
             Left,
             Right
         }
@@ -53,6 +54,11 @@ namespace Level2
 
             transform.position = currentHandlePosition;
             PositionWeapon();
+        }
+
+        private void Awake()
+        {
+            Application.targetFrameRate = 62;
         }
 
         private void PositionWeapon()
