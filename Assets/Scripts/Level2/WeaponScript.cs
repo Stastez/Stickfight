@@ -59,8 +59,15 @@ namespace Level2
             PlayerScript _playerScript = _player.GetComponent<PlayerScript>();
             EnemyScript _enemyScript = _enemy.GetComponent<EnemyScript>();
 
-            return (_enemyScript.weaponPosition == _playerScript.weaponPosition) &&
-                   (_enemyScript.weaponSide != _playerScript.weaponSide);
+            bool positionMatched = _enemyScript.weaponPosition switch
+            {
+                PlayerScript.WeaponPosition.Middle => _playerScript.weaponPosition == PlayerScript.WeaponPosition.Middle,
+                PlayerScript.WeaponPosition.Down => _playerScript.weaponPosition == PlayerScript.WeaponPosition.Up,
+                PlayerScript.WeaponPosition.Up => _playerScript.weaponPosition == PlayerScript.WeaponPosition.Down,
+                _ => false
+            };
+
+            return positionMatched && (_enemyScript.weaponSide != _playerScript.weaponSide);
         }
     }
 }

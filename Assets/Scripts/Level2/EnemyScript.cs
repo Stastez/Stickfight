@@ -55,12 +55,12 @@ namespace Level2
             switch (handleRotation)
             {
                 case (>= 0 and < 60) or (>= 300 and < 360):
-                    _weapon.transform.eulerAngles = up;
+                    _weapon.transform.eulerAngles = down;
                     _weapon.transform.position = _enemy.transform.position +
                                                  new Vector3(horizontalWeaponDistance, weaponHeight,
-                                                     verticalWeaponDistance);
+                                                     -verticalWeaponDistance);
 
-                    weaponPosition = PlayerScript.WeaponPosition.Up;
+                    weaponPosition = PlayerScript.WeaponPosition.Down;
                     break;
                 case (>= 60 and < 120) or (>= 240 and < 300):
                     _weapon.transform.eulerAngles = middle;
@@ -70,12 +70,12 @@ namespace Level2
                     weaponPosition = PlayerScript.WeaponPosition.Middle;
                     break;
                 case (>= 120 and < 180) or (>= 180 and < 240):
-                    _weapon.transform.eulerAngles = down;
+                    _weapon.transform.eulerAngles = up;
                     _weapon.transform.position = _enemy.transform.position +
                                                  new Vector3(horizontalWeaponDistance, weaponHeight,
-                                                     -verticalWeaponDistance);
+                                                     verticalWeaponDistance);
 
-                    weaponPosition = PlayerScript.WeaponPosition.Down;
+                    weaponPosition = PlayerScript.WeaponPosition.Up;
                     break;
             }
         }
