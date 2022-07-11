@@ -67,6 +67,8 @@ namespace Level2
             _speech.Speak("You can rotate your weapon in six directions:");
             StartCoroutine(nameof(Rotate), _meHandle);
 
+            Thread.Sleep(12000);
+            
             _speech.Speak("Careful: your enemy can block you if their sword is in the opposite position!");
             
         }
@@ -124,7 +126,7 @@ namespace Level2
                     handle.Free();
                 
                 handle.Rotate(rotation);
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(2);
             }
             
             handle.FreeRotation();

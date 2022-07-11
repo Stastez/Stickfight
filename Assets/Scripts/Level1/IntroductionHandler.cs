@@ -44,12 +44,12 @@ namespace Level1
             await _meHandle.MoveToPosition(_player.transform.position);
 
             _speech.Speak("You've got a sword!");
-            await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 0.25f);
+            await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 1f);
 
             await _itHandle.MoveToPosition(_enemy.transform.position);
             
             _speech.Speak("Stab this guy!");
-            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.25f);
+            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 1f);
 
             await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
         }
