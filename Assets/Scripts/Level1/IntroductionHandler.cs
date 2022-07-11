@@ -41,12 +41,13 @@ namespace Level1
 
         private static async Task PlayIntro()
         {
-            await _itHandle.MoveToPosition(_enemy.transform.position);
             await _meHandle.MoveToPosition(_player.transform.position);
 
             _speech.Speak("You've got a sword!");
             await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 0.25f);
 
+            await _itHandle.MoveToPosition(_enemy.transform.position);
+            
             _speech.Speak("Stab this guy!");
             await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.25f);
 
