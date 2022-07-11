@@ -126,6 +126,8 @@ namespace Level2
                 handle.Rotate(rotation);
                 yield return new WaitForSeconds(1);
             }
+            
+            handle.FreeRotation();
         }
     }
 }
