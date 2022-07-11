@@ -53,7 +53,7 @@ namespace Level2
             if (playIntro) await PlayIntro();
             
             await _meHandle.MoveToPosition(_player.transform.position);
-            _meHandle.Free();
+            _meHandle.FreeRotation();
             await _itHandle.SwitchTo(_enemy, 20f);
         }
 
