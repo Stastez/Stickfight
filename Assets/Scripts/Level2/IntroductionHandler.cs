@@ -53,7 +53,8 @@ namespace Level2
             if (playIntro) await PlayIntro();
             
             await _meHandle.MoveToPosition(_player.transform.position);
-            await _itHandle.SwitchTo(_enemy);
+            _meHandle.Free();
+            await _itHandle.SwitchTo(_enemy, 20f);
         }
 
         private async Task PlayIntro()
