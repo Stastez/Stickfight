@@ -53,6 +53,11 @@ namespace Level1
             PositionWeapon();
         }
 
+        private void Awake()
+        {
+            Application.targetFrameRate = 62;
+        }
+        
         private void PositionWeapon()
         {
             const float horizontalWeaponDistance = 0.75f;
