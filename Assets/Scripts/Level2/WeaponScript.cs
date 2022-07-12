@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Level2
         private PantoHandle _itHandle;
 
         public AudioClip enemyKilled, enemyBlocked, victory;
+        private bool blocked = false;
 
         private void Start()
         {
@@ -32,42 +34,33 @@ namespace Level2
             _speech.Stop();
         }
 
+        private void OnCollisionExit(Collision other)
+        {
+            GameObject collidedGameObject = other.collider.gameObject;
+            if (collidedGameObject.CompareTag("EnemyWeapon"))
+            {
+                blocked = false;
+            }
+        }
+
         private async void OnCollisionEnter(Collision collision)
         {
             GameObject collidedGameObject = collision.collider.gameObject;
 
-            if (collidedGameObject.Equals(_enemy))
+            if (collidedGameObject.CompareTag("EnemyWeapon"))
             {
-                if (WasHitBlocked())
-                {
-                    _audioSource.PlayOneShot(enemyBlocked);
-                    return;
-                }
-
+                blocked = true;
+                _audioSource.PlayOneShot(enemyBlocked);
+            }
+            else if (collidedGameObject.Equals(_enemy) && !blocked)
+            {
                 _audioSource.PlayOneShot(enemyKilled);
                 Destroy(_enemy);
                 Destroy(_enemyWeapon);
-                Thread.Sleep((int) (enemyKilled.length * 1000));
-                _audioSource.PlayOneShot(victory, 0.25f);
-                _speech.Speak("You have slain your enemy!");
+                Thread.Sleep((int)(enemyKilled.length * 1000));
+                _speech.Speak("Good job defeating your second enemy");
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
             }
-        }
-
-        private bool WasHitBlocked()
-        {
-            PlayerScript _playerScript = _player.GetComponent<PlayerScript>();
-            EnemyScript _enemyScript = _enemy.GetComponent<EnemyScript>();
-
-            bool positionMatched = _enemyScript.weaponPosition switch
-            {
-                PlayerScript.WeaponPosition.Middle => _playerScript.weaponPosition == PlayerScript.WeaponPosition.Middle,
-                PlayerScript.WeaponPosition.Down => _playerScript.weaponPosition == PlayerScript.WeaponPosition.Up,
-                PlayerScript.WeaponPosition.Up => _playerScript.weaponPosition == PlayerScript.WeaponPosition.Down,
-                _ => false
-            };
-
-            return positionMatched && (_enemyScript.weaponSide != _playerScript.weaponSide);
         }
     }
 }
