@@ -34,21 +34,22 @@ namespace Level1
             if (playIntro) await PlayIntro();
 
             await _meHandle.MoveToPosition(_player.transform.position);
-            await _itHandle.SwitchTo(_enemy);
+            await _itHandle.SwitchTo(_enemy, 20f);
             
             //TODO: Freeze rotation of end effector
         }
 
         private static async Task PlayIntro()
         {
-            await _itHandle.MoveToPosition(_enemy.transform.position);
             await _meHandle.MoveToPosition(_player.transform.position);
 
             _speech.Speak("You've got a sword!");
-            await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 0.25f);
+            await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 1f);
 
+            await _itHandle.MoveToPosition(_enemy.transform.position);
+            
             _speech.Speak("Stab this guy!");
-            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 0.25f);
+            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 1f);
 
             await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
         }
