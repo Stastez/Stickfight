@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using System.Threading;
 using System.Threading.Tasks;
 using DualPantoFramework;
 using SpeechIO;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Level2
@@ -22,7 +20,6 @@ namespace Level2
         }
 
         private GameObject _panto, _player, _enemy;
-        private Level _level;
         private PantoHandle _meHandle, _itHandle;
         private SpeechOut _speech;
 
@@ -33,7 +30,6 @@ namespace Level2
             _panto = GameObject.Find("Panto");
             _player = GameObject.Find("Player");
             _enemy = GameObject.Find("Enemy");
-            _level = _panto.GetComponent<Level>();
             _meHandle = _panto.GetComponent<UpperHandle>();
             _itHandle = _panto.GetComponent<LowerHandle>();
             _speech = new SpeechOut();
@@ -63,12 +59,10 @@ namespace Level2
 
             _player.GetComponent<PlayerScript>().isIntroDone = true;
 
-            _speech.Speak("You can now rotate your weapon freely in all directions:");
+            _speech.Speak("Ihr könnt Eure Waffe komplett um euch herum drehen:", lang: SpeechBase.LANGUAGE.GERMAN);
 
-            _speech.Speak("But be careful! Your enemy will try to block your attempts");
+            _speech.Speak("Aber Vorsicht! Eure Widersacher werden versuchen, Eure Schläge zu parieren!", lang: SpeechBase.LANGUAGE.GERMAN);
             StartCoroutine(nameof(Rotate), _meHandle);
-
-            Thread.Sleep(6000);
         }
 
         /**

@@ -49,7 +49,7 @@ namespace Level1
                 Destroy(_enemyWeapon);
                 Thread.Sleep((int) (enemyKilled.length * 1000));
                 _audioSource.PlayOneShot(victory, 0.25f);
-                _speech.Speak("You have slain your enemy!");
+                _speech.Speak("Ihr habt Euren Feind gestürzt!");
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
             }
         }

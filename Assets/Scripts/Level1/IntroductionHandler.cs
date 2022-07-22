@@ -24,8 +24,7 @@ namespace Level1
 
         private static Level _level = _panto.GetComponent<Level>();
 
-        private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(),
-            _itHandle = _panto.GetComponent<LowerHandle>();
+        private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(), _itHandle = _panto.GetComponent<LowerHandle>();
 
         private static SpeechOut _speech = new();
 
@@ -43,12 +42,12 @@ namespace Level1
         {
             await _meHandle.MoveToPosition(_player.transform.position);
 
-            _speech.Speak("You've got a sword!");
+            _speech.Speak("Ihr habt ein Schwert!", lang: SpeechBase.LANGUAGE.GERMAN);
             await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 1f);
 
             await _itHandle.MoveToPosition(_enemy.transform.position);
             
-            _speech.Speak("Stab this guy!");
+            _speech.Speak("Stecht den da ab!", lang: SpeechBase.LANGUAGE.GERMAN);
             await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 1f);
 
             await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
