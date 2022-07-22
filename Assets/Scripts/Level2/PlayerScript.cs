@@ -7,13 +7,6 @@ namespace Level2
 {
     public class PlayerScript : MonoBehaviour
     {
-        public enum WeaponPosition
-        {
-            Up,
-            Middle,
-            Down
-        }
-
         public enum WeaponSide
         {
             Left,
@@ -26,7 +19,6 @@ namespace Level2
 
         public bool playIntro;
         public bool isIntroDone;
-        public WeaponPosition weaponPosition;
         public WeaponSide weaponSide;
 
         // Start is called before the first frame update
@@ -41,7 +33,7 @@ namespace Level2
 
             isIntroDone = true;
 
-            InitializeWorld.CreateWalls();
+            GameManager.CreateWalls();
         }
 
         private void FixedUpdate()
@@ -70,6 +62,11 @@ namespace Level2
             _weapon.transform.position = _player.transform.position + new Vector3(
                 Mathf.Sin(handleRotation / 360 * 2 * Mathf.PI) * weaponDistance, 0,
                 Mathf.Cos(handleRotation / 360 * 2 * Mathf.PI) * weaponDistance);
+        }
+
+        public void KillPlayer()
+        {
+            
         }
     }
 }

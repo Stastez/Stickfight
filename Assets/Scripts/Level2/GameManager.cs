@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Level2
 {
-    public class InitializeWorld : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         public static void CreateWalls()
         {

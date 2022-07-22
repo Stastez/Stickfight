@@ -8,8 +8,7 @@ namespace Level2
         private PantoHandle _itHandle, _meHandle;
         private GameObject _enemy, _player, _weapon;
         private Vector3 _oldPosition;
-
-        public PlayerScript.WeaponPosition weaponPosition;
+        
         public PlayerScript.WeaponSide weaponSide;
 
         // Start is called before the first frame update
