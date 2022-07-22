@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Level2
 {
-    public class WeaponScript : MonoBehaviour, IObserver<bool>
+    public class WeaponScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private BoxCollider _ownCollider;
         private GameObject _player, _ownGameObject, _enemy, _enemyWeapon;
@@ -77,9 +77,9 @@ namespace Level2
             throw new NotImplementedException();
         }
 
-        public void OnNext(bool value)
+        public void OnNext(GameManager.GameManagerUpdate value)
         {
-            _isCurrentlyPaused = value;
+            _isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }

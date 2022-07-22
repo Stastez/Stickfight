@@ -4,7 +4,7 @@ using DualPantoFramework;
 
 namespace Level2
 {
-    public class EnemyScript : MonoBehaviour, IObserver<bool>
+    public class EnemyScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private PantoHandle _itHandle, _meHandle;
         private GameObject _enemy, _player, _weapon;
@@ -83,9 +83,9 @@ namespace Level2
             throw new NotImplementedException();
         }
 
-        public void OnNext(bool value)
+        public void OnNext(GameManager.GameManagerUpdate value)
         {
-            _isCurrentlyPaused = value;
+            _isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Level2
 {
-    public class PlayerScript : MonoBehaviour, IObserver<bool>
+    public class PlayerScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private PantoHandle _meHandle;
         private GameObject _player, _weapon;
@@ -75,9 +75,9 @@ namespace Level2
             Debug.Log("[Observer] OnError was called.");
         }
 
-        public void OnNext(bool value)
+        public void OnNext(GameManager.GameManagerUpdate value)
         {
-            _isCurrentlyPaused = value;
+            _isCurrentlyPaused = value.isCurrentlyPaused;
 
             if (_isCurrentlyPaused)
             {

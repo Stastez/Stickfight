@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Level2
 {
-    public class EnemyWeaponScript : MonoBehaviour, IObserver<bool>
+    public class EnemyWeaponScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private GameObject _player, _enemyWeapon;
         private PlayerScript _playerScript;
@@ -48,9 +48,9 @@ namespace Level2
             Debug.Log("[Observer] OnError was called.");
         }
 
-        public void OnNext(bool value)
+        public void OnNext(GameManager.GameManagerUpdate value)
         {
-            isCurrentlyPaused = value;
+            isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Level2
 {
-    public class Var2EnemyMovement : MonoBehaviour, IObserver<bool>
+    public class Var2EnemyMovement : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private GameObject _enemy;
         private float _wantedPosition;
@@ -62,9 +62,9 @@ namespace Level2
             throw new NotImplementedException();
         }
 
-        public void OnNext(bool value)
+        public void OnNext(GameManager.GameManagerUpdate value)
         {
-            _isCurrentlyPaused = value;
+            _isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }

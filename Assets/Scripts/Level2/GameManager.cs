@@ -5,14 +5,26 @@ using UnityEngine;
 
 namespace Level2
 {
-    public class GameManager : MonoBehaviour, IObservable<bool>
+    public class GameManager : MonoBehaviour, IObservable<GameManager.GameManagerUpdate>
     {
-        private List<IObserver<bool>> _observers;
+        public class GameManagerUpdate
+        {
+            public bool isCurrentlyPaused, isGameOver;
+
+            public GameManagerUpdate(bool isCurrentlyPaused, bool isGameOver)
+            {
+                this.isCurrentlyPaused = isCurrentlyPaused;
+                this.isGameOver = isGameOver;
+            }
+        }
+        
+        private List<IObserver<GameManagerUpdate>> _observers;
         public bool isCurrentlyPaused;
+        public bool isGameOver;
 
         private void Start()
         {
-            _observers = new List<IObserver<bool>>();
+            _observers = new List<IObserver<GameManagerUpdate>>();
             SubscribeObservers();
         }
 
@@ -62,7 +74,7 @@ namespace Level2
         }
         
         //Observer infrastructure
-        public IDisposable Subscribe(IObserver<bool> observer)
+        public IDisposable Subscribe(IObserver<GameManagerUpdate> observer)
         {
             if (! _observers.Contains(observer))
                 _observers.Add(observer);
@@ -71,10 +83,10 @@ namespace Level2
         
         private class Unsubscriber : IDisposable
         {
-            private List<IObserver<bool>>_observers;
-            private IObserver<bool> _observer;
+            private List<IObserver<GameManagerUpdate>>_observers;
+            private IObserver<GameManagerUpdate> _observer;
 
-            public Unsubscriber(List<IObserver<bool>> observers, IObserver<bool> observer)
+            public Unsubscriber(List<IObserver<GameManagerUpdate>> observers, IObserver<GameManagerUpdate> observer)
             {
                 this._observers = observers;
                 this._observer = observer;
@@ -91,7 +103,7 @@ namespace Level2
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(isCurrentlyPaused);
+                observer.OnNext(new GameManagerUpdate(isCurrentlyPaused, isGameOver));
             }
         }
     }
