@@ -1,32 +1,56 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Level2;
 using SpeechIO;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyWeaponScript : MonoBehaviour
+namespace Level2
 {
-    private GameObject _player, _enemyWeapon;
-    private AudioSource _audio;
-    private SpeechOut _speechOut;
-    private SpeechIn _speechIn;
-    private bool currentlyInCollision;
-
-    private void Start()
+    public class EnemyWeaponScript : MonoBehaviour, IObserver<bool>
     {
-        _player = GameObject.Find("Player");
-        _enemyWeapon = GameObject.Find("EnemyWeapon");
-    }
+        private GameObject _player, _enemyWeapon;
+        private PlayerScript _playerScript;
+        private AudioSource _audio;
+        private SpeechOut _speechOut;
+        private SpeechIn _speechIn;
+        private bool currentlyInCollision;
+        private bool isCurrentlyPaused;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        var otherGameobject = collision.transform.gameObject;
+        private void Start()
+        {
+            _player = GameObject.Find("Player");
+            _enemyWeapon = GameObject.Find("EnemyWeapon");
+            _playerScript = _player.GetComponent<PlayerScript>();
+            _audio = _enemyWeapon.GetComponent<AudioSource>();
+            _speechOut = new SpeechOut();
+            //_speechIn = new SpeechIn();
+        }
 
-        if (otherGameobject != _player && !currentlyInCollision) return;
+        private void OnCollisionEnter(Collision collision)
+        {
+            var otherGameobject = collision.transform.gameObject;
 
-        currentlyInCollision = true;
-        _audio.Play();
-        _speechOut.Speak("Oh nein! Ihr wurdet ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
+            if (otherGameobject != _player || currentlyInCollision || isCurrentlyPaused) return;
+
+            currentlyInCollision = true;
+            _audio.Play();
+            _speechOut.Speak("Oh nein! Ihr wurdet ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
+            _playerScript.KillPlayer();
+        }
+
+        //Observer infrastructure
+        public void OnCompleted()
+        {
+            Debug.Log("[Observer] OnCompleted was called.");
+        }
+
+        public void OnError(Exception error)
+        {
+            Debug.Log("[Observer] OnError was called.");
+        }
+
+        public void OnNext(bool value)
+        {
+            isCurrentlyPaused = value;
+        }
     }
 }

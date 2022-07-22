@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Level2
 {
-    public class WeaponScript : MonoBehaviour
+    public class WeaponScript : MonoBehaviour, IObserver<bool>
     {
         private BoxCollider _ownCollider;
         private GameObject _player, _ownGameObject, _enemy, _enemyWeapon;
@@ -16,6 +16,7 @@ namespace Level2
 
         public AudioClip enemyKilled, enemyBlocked, victory;
         private bool blocked = false;
+        private bool _isCurrentlyPaused;
 
         private void Start()
         {
@@ -47,6 +48,8 @@ namespace Level2
         {
             GameObject collidedGameObject = collision.collider.gameObject;
 
+            if (_isCurrentlyPaused) return;
+            
             if (collidedGameObject.CompareTag("EnemyWeapon"))
             {
                 blocked = true;
@@ -61,6 +64,22 @@ namespace Level2
                 _speech.Speak("Auch der zweite Gegner ist dank Euch Geschichte!");
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
             }
+        }
+
+        //Observer infrastructure
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(bool value)
+        {
+            _isCurrentlyPaused = value;
         }
     }
 }

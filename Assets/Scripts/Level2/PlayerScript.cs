@@ -5,21 +5,16 @@ using UnityEngine.SceneManagement;
 
 namespace Level2
 {
-    public class PlayerScript : MonoBehaviour
+    public class PlayerScript : MonoBehaviour, IObserver<bool>
     {
-        public enum WeaponSide
-        {
-            Left,
-            Right
-        }
-
         private PantoHandle _meHandle;
         private GameObject _player, _weapon;
         private IntroductionHandler _intro;
+        private GameManager _gameManager;
 
         public bool playIntro;
         public bool isIntroDone;
-        public WeaponSide weaponSide;
+        private bool _isCurrentlyPaused;
 
         // Start is called before the first frame update
         async void Start()
@@ -28,17 +23,17 @@ namespace Level2
             _player = GameObject.Find("Player");
             _weapon = GameObject.Find("PlayerWeapon");
             _intro = _player.GetComponent<IntroductionHandler>();
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
             await _intro.Introduce(playIntro);
-
             isIntroDone = true;
-
-            GameManager.CreateWalls();
+            
+            _gameManager.CreateWalls();
         }
 
         private void FixedUpdate()
         {
-            if (!isIntroDone) return;
+            if (!isIntroDone || _isCurrentlyPaused) return;
 
             var currentHandlePosition = _meHandle.HandlePosition(transform.position);
 
@@ -66,7 +61,32 @@ namespace Level2
 
         public void KillPlayer()
         {
-            
+            _gameManager.PauseGame();
+        }
+
+        //Observer infrastructure
+        public void OnCompleted()
+        {
+            Debug.Log("[Observer] OnCompleted was called.");
+        }
+
+        public void OnError(Exception error)
+        {
+            Debug.Log("[Observer] OnError was called.");
+        }
+
+        public void OnNext(bool value)
+        {
+            _isCurrentlyPaused = value;
+
+            if (_isCurrentlyPaused)
+            {
+                _meHandle.Freeze();
+            }
+            else
+            {
+                _meHandle.Free();
+            }
         }
     }
 }

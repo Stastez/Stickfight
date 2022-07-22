@@ -1,15 +1,15 @@
+using System;
 using UnityEngine;
 using DualPantoFramework;
 
 namespace Level2
 {
-    public class EnemyScript : MonoBehaviour
+    public class EnemyScript : MonoBehaviour, IObserver<bool>
     {
         private PantoHandle _itHandle, _meHandle;
         private GameObject _enemy, _player, _weapon;
         private Vector3 _oldPosition;
-        
-        public PlayerScript.WeaponSide weaponSide;
+        private bool _isCurrentlyPaused;
 
         // Start is called before the first frame update
         async void Start()
@@ -23,6 +23,8 @@ namespace Level2
 
         private void FixedUpdate()
         {
+            if (_isCurrentlyPaused) return;
+            
             PositionWeapon();
         }
 
@@ -37,6 +39,8 @@ namespace Level2
 
         private void RotateWeapon()
         {
+            if (_isCurrentlyPaused) return;
+            
             float weaponDistance = 0.75f;
             var handleRotation = _meHandle.GetRotation() -90;
             var curRotation = _weapon.transform.eulerAngles.y;
@@ -66,6 +70,22 @@ namespace Level2
             _weapon.transform.position += new Vector3(0, 0, enemyPosition.z - _oldPosition.z);
 
             _oldPosition = enemyPosition;
+        }
+
+        //Observer infrastructure
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(bool value)
+        {
+            _isCurrentlyPaused = value;
         }
     }
 }
