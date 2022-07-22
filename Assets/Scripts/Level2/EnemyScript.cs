@@ -19,7 +19,7 @@ namespace Level2
 
             _oldPosition = _enemy.transform.position;
 
-            InvokeRepeating(nameof(RotateWeapon), 0, 2);
+            InvokeRepeating(nameof(RotateWeapon), 0, 0.1f);
         }
 
         private void FixedUpdate()
@@ -38,46 +38,26 @@ namespace Level2
 
         private void RotateWeapon()
         {
-            var playerIsLeftOfEnemy = _player.transform.position.x <= _enemy.transform.position.x;
-
-            float horizontalWeaponDistance = (playerIsLeftOfEnemy) ? -0.75f : 0.75f;
-            float verticalWeaponDistance = 0.33f;
-            const float weaponHeight = 0f;
-            var handleRotation = _meHandle.GetRotation();
-            float weaponRotation = (playerIsLeftOfEnemy) ? -25f : 25f;
-
-            var up = new Vector3(0, -weaponRotation, 0);
-            var middle = new Vector3(0, 0, 0);
-            var down = new Vector3(0, weaponRotation, 0);
-
-            weaponSide = playerIsLeftOfEnemy ? PlayerScript.WeaponSide.Left : PlayerScript.WeaponSide.Right;
-
-            switch (handleRotation)
+            float weaponDistance = 0.75f;
+            var handleRotation = _meHandle.GetRotation() -90;
+            var curRotation = _weapon.transform.eulerAngles.y;
+            var targetRotation = 1f;
+            if (Mathf.Abs(curRotation - handleRotation) > 181)
             {
-                case (>= 0 and < 60) or (>= 300 and < 360):
-                    _weapon.transform.eulerAngles = down;
-                    _weapon.transform.position = _enemy.transform.position +
-                                                 new Vector3(horizontalWeaponDistance, weaponHeight,
-                                                     -verticalWeaponDistance);
-
-                    weaponPosition = PlayerScript.WeaponPosition.Down;
-                    break;
-                case (>= 60 and < 120) or (>= 240 and < 300):
-                    _weapon.transform.eulerAngles = middle;
-                    _weapon.transform.position = _enemy.transform.position +
-                                                 new Vector3(horizontalWeaponDistance, weaponHeight, 0);
-
-                    weaponPosition = PlayerScript.WeaponPosition.Middle;
-                    break;
-                case (>= 120 and < 180) or (>= 180 and < 240):
-                    _weapon.transform.eulerAngles = up;
-                    _weapon.transform.position = _enemy.transform.position +
-                                                 new Vector3(horizontalWeaponDistance, weaponHeight,
-                                                     verticalWeaponDistance);
-
-                    weaponPosition = PlayerScript.WeaponPosition.Up;
-                    break;
+                if (curRotation < targetRotation)
+                    curRotation += 360;
+                else
+                    handleRotation += 360;
             }
+            
+
+
+            _weapon.transform.eulerAngles = new Vector3(0, curRotation+(handleRotation-curRotation)/20, 0);
+            var rot = _enemy.transform.eulerAngles;
+            _enemy.transform.eulerAngles = new Vector3(rot.x, curRotation+(handleRotation-curRotation)/20 - 90, rot.z);
+            _weapon.transform.position = _enemy.transform.position - new Vector3(
+                Mathf.Sin((curRotation+(handleRotation-curRotation)/10 + 90) / 360 * 2 * Mathf.PI) * weaponDistance, 0,
+                Mathf.Cos((curRotation+(handleRotation-curRotation)/10 + 90) / 360 * 2 * Mathf.PI) * weaponDistance);
         }
 
         private void PositionWeapon()

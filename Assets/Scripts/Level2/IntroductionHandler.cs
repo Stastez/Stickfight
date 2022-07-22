@@ -49,34 +49,33 @@ namespace Level2
         public async Task Introduce(bool playIntro)
         {
             if (!_initialized) Start();
-            
+
             if (playIntro) await PlayIntro();
-            
+            await _itHandle.SwitchTo(_enemy, 50f);
+
             await _meHandle.MoveToPosition(_player.transform.position);
             _meHandle.FreeRotation();
-            await _itHandle.SwitchTo(_enemy, 20f);
         }
 
         private async Task PlayIntro()
         {
-            await _itHandle.MoveToPosition(_enemy.transform.position);
             await _meHandle.MoveToPosition(_player.transform.position);
 
             _player.GetComponent<PlayerScript>().isIntroDone = true;
 
-            _speech.Speak("You can rotate your weapon in six directions:");
+            _speech.Speak("You can now rotate your weapon freely in all directions:");
+
+            _speech.Speak("But be careful! Your enemy will try to block your attempts");
             StartCoroutine(nameof(Rotate), _meHandle);
 
-            Thread.Sleep(12000);
-            
-            _speech.Speak("Careful: your enemy can block you if their sword is in the opposite position!");
-            
+            Thread.Sleep(6000);
         }
 
         /**
          * Max movement speed is 1.5f
          */
-        public async Task Wiggle(PantoHandle handle, GameObject reference, WiggleDirection direction, float intensity, float extent)
+        public async Task Wiggle(PantoHandle handle, GameObject reference, WiggleDirection direction, float intensity,
+            float extent)
         {
             Vector3 originalPosition = handle.HandlePosition(reference.transform.position);
 
@@ -85,10 +84,10 @@ namespace Level2
                 for (int i = 0; i < repetitions; i++)
                 {
                     await handle.MoveToPosition(originalPosition + direction * extent, intensity);
-                    await handle.MoveToPosition(originalPosition, handle.MaxMovementSpeed());   
+                    await handle.MoveToPosition(originalPosition, handle.MaxMovementSpeed());
                 }
             }
-            
+
             switch (direction)
             {
                 case WiggleDirection.Up:
@@ -118,18 +117,15 @@ namespace Level2
 
         private IEnumerator Rotate(PantoHandle handle)
         {
-            float[] rotations = {30, 90, 150, 210, 270, 330};
-            
-            foreach (float rotation in rotations)
+            for (float rotation = 0; rotation < 360; rotation += 2)
             {
                 if (handle.isFrozen)
                     handle.Free();
-                
+
                 handle.Rotate(rotation);
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(0.003f);
+                handle.FreeRotation();
             }
-            
-            handle.FreeRotation();
         }
     }
 }

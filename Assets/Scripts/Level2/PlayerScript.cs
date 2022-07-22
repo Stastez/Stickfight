@@ -15,7 +15,7 @@ namespace Level2
         }
 
         public enum WeaponSide
-        { 
+        {
             Left,
             Right
         }
@@ -36,7 +36,7 @@ namespace Level2
             _player = GameObject.Find("Player");
             _weapon = GameObject.Find("PlayerWeapon");
             _intro = _player.GetComponent<IntroductionHandler>();
-            
+
             await _intro.Introduce(playIntro);
 
             isIntroDone = true;
@@ -63,62 +63,13 @@ namespace Level2
 
         private void PositionWeapon()
         {
-            const float horizontalWeaponDistance = 0.75f;
-            const float verticalWeaponDistance = 0.33f;
-            const float weaponHeight = 0f;
+            const float weaponDistance = 0.75f;
             var handleRotation = _meHandle.GetRotation();
 
-            const float weaponRotation = 25f;
-
-            var up = new Vector3(0, -weaponRotation, 0);
-            var middle = new Vector3(0, 0, 0);
-            var down = new Vector3(0, weaponRotation, 0);
-
-            switch (handleRotation)
-            {
-                case >= 0 and < 60:
-                    _weapon.transform.eulerAngles = up;
-                    _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, verticalWeaponDistance);
-
-                    weaponPosition = WeaponPosition.Up;
-                    weaponSide = WeaponSide.Right;
-                    break;
-                case >= 60 and < 120:
-                    _weapon.transform.eulerAngles = middle;
-                    _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, 0);
-
-                    weaponPosition = WeaponPosition.Middle;
-                    weaponSide = WeaponSide.Right;
-                    break;
-                case >= 120 and < 180:
-                    _weapon.transform.eulerAngles = down;
-                    _weapon.transform.position = _player.transform.position + new Vector3(horizontalWeaponDistance, weaponHeight, -verticalWeaponDistance);
-
-                    weaponPosition = WeaponPosition.Down;
-                    weaponSide = WeaponSide.Right;
-                    break;
-                case >= 180 and < 240:
-                    _weapon.transform.eulerAngles = -down;
-                    _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, weaponHeight, -verticalWeaponDistance);
-
-                    weaponPosition = WeaponPosition.Down;
-                    weaponSide = WeaponSide.Left;
-                    break;
-                case >= 240 and < 300:
-                    _weapon.transform.eulerAngles = middle;
-                    _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, weaponHeight, 0);
-
-                    weaponPosition = WeaponPosition.Middle;
-                    weaponSide = WeaponSide.Left;
-                    break;
-                case >= 300 and < 360:
-                    _weapon.transform.eulerAngles = -up;
-                    _weapon.transform.position = _player.transform.position + new Vector3(-horizontalWeaponDistance, weaponHeight, verticalWeaponDistance);
-
-                    weaponPosition = WeaponPosition.Up;
-                    weaponSide = WeaponSide.Left;
-                    break;
-            }
+            _weapon.transform.eulerAngles = new Vector3(0, handleRotation - 90, 0);
+            _weapon.transform.position = _player.transform.position + new Vector3(
+                Mathf.Sin(handleRotation / 360 * 2 * Mathf.PI) * weaponDistance, 0,
+                Mathf.Cos(handleRotation / 360 * 2 * Mathf.PI) * weaponDistance);
         }
     }
 }
