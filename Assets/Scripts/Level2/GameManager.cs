@@ -84,6 +84,11 @@ namespace Level2
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        private void OnApplicationQuit()
+        {
+            PlayerPrefs.DeleteAll();
+        }
+
         //Observer infrastructure
         public IDisposable Subscribe(IObserver<GameManagerUpdate> observer)
         {

@@ -1,5 +1,4 @@
 using System;
-using Level2;
 using SpeechIO;
 using UnityEngine;
 
@@ -13,8 +12,8 @@ namespace Level2
         private SpeechOut _speechOut;
         private SpeechIn _speechIn;
         private GameManager _gameManager;
-        private bool currentlyInCollision;
-        private bool isCurrentlyPaused;
+        private bool _currentlyInCollision;
+        private bool _isCurrentlyPaused;
 
         private void Start()
         {
@@ -23,23 +22,46 @@ namespace Level2
             _playerScript = _player.GetComponent<PlayerScript>();
             _audio = _enemyWeapon.GetComponent<AudioSource>();
             _speechOut = new SpeechOut();
-            //_speechIn = new SpeechIn();
+            _speechIn = new SpeechIn(SelectGameOverOption);
             _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
 
         private async void OnCollisionEnter(Collision collision)
         {
-            var otherGameobject = collision.transform.gameObject;
+            var otherGameObject = collision.transform.gameObject;
 
-            if (otherGameobject != _player || currentlyInCollision || isCurrentlyPaused) return;
+            if (otherGameObject != _player || _currentlyInCollision || _isCurrentlyPaused) return;
 
-            currentlyInCollision = true;
+            _currentlyInCollision = true;
             _audio.Play();
             _gameManager.StopGame();
             await _speechOut.Speak("Oh nein! Ihr wurdet ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
-            _gameManager.RestartGame(false);
+
+            //SpeechIn apparently only recognizes English
+            await _speechOut.Speak("Um das Spiel zu beenden, sagt", lang: SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("Quit");
+            await _speechOut.Speak("Um das Spiel mit Einführung neu zu starten, sagt", lang: SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("Intro");
+            await _speechOut.Speak("um das Spiel ohne Einführung neu zu starten, sagt", lang: SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("Restart");
+
+            await _speechIn.Listen(new string[] {"Quit", "Intro", "Restart"});
         }
 
+        private void SelectGameOverOption(string command)
+        {
+            if (command == "Quit")
+            {
+                Application.Quit();
+            } else if (command == "Intro")
+            {
+                _gameManager.RestartGame(true);
+            } else if (command == "Restart")
+            {
+                _gameManager.RestartGame(false);
+            }
+        }
+        
         //Observer infrastructure
         public void OnCompleted()
         {
@@ -53,7 +75,7 @@ namespace Level2
 
         public void OnNext(GameManager.GameManagerUpdate value)
         {
-            isCurrentlyPaused = value.isCurrentlyPaused;
+            _isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }
