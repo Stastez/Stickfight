@@ -12,6 +12,7 @@ namespace Level2
         private AudioSource _audio;
         private SpeechOut _speechOut;
         private SpeechIn _speechIn;
+        private GameManager _gameManager;
         private bool currentlyInCollision;
         private bool isCurrentlyPaused;
 
@@ -23,9 +24,10 @@ namespace Level2
             _audio = _enemyWeapon.GetComponent<AudioSource>();
             _speechOut = new SpeechOut();
             //_speechIn = new SpeechIn();
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private async void OnCollisionEnter(Collision collision)
         {
             var otherGameobject = collision.transform.gameObject;
 
@@ -33,8 +35,9 @@ namespace Level2
 
             currentlyInCollision = true;
             _audio.Play();
-            _speechOut.Speak("Oh nein! Ihr wurdet ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
-            _playerScript.KillPlayer();
+            _gameManager.StopGame();
+            await _speechOut.Speak("Oh nein! Ihr wurdet ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
+            _gameManager.RestartGame(false);
         }
 
         //Observer infrastructure

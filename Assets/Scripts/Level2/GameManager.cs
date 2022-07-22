@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DualPantoFramework;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Level2
 {
@@ -19,8 +20,8 @@ namespace Level2
         }
         
         private List<IObserver<GameManagerUpdate>> _observers;
-        public bool isCurrentlyPaused;
-        public bool isGameOver;
+        private bool _isCurrentlyPaused;
+        private bool _isGameOver;
 
         private void Start()
         {
@@ -54,7 +55,7 @@ namespace Level2
         
         public void PauseGame()
         {
-            isCurrentlyPaused = true;
+            _isCurrentlyPaused = true;
             UpdatePauseState();
             
             Debug.Log("Game was paused.");
@@ -62,7 +63,7 @@ namespace Level2
         
         public void ResumeGame()
         {
-            isCurrentlyPaused = false;
+            _isCurrentlyPaused = false;
             UpdatePauseState();
             
             Debug.Log("Game was resumed.");
@@ -70,9 +71,19 @@ namespace Level2
 
         public void StopGame()
         {
+            _isCurrentlyPaused = true;
+            _isGameOver = true;
+            UpdatePauseState();
             
+            Debug.Log("GameOver was called.");
         }
-        
+
+        public void RestartGame(bool playIntro)
+        {
+            PlayerPrefs.SetInt("playIntro", playIntro ? 1 : 0);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
         //Observer infrastructure
         public IDisposable Subscribe(IObserver<GameManagerUpdate> observer)
         {
@@ -103,7 +114,7 @@ namespace Level2
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(new GameManagerUpdate(isCurrentlyPaused, isGameOver));
+                observer.OnNext(new GameManagerUpdate(_isCurrentlyPaused, _isGameOver));
             }
         }
     }

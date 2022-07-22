@@ -19,6 +19,11 @@ namespace Level2
         // Start is called before the first frame update
         async void Start()
         {
+            if (PlayerPrefs.HasKey("playIntro"))
+            {
+                playIntro = (PlayerPrefs.GetInt("playIntro") == 1);
+            }
+            
             _meHandle = GameObject.Find("Panto").GetComponent<UpperHandle>();
             _player = GameObject.Find("Player");
             _weapon = GameObject.Find("PlayerWeapon");
