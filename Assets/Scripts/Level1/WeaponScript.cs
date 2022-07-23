@@ -2,6 +2,7 @@
 using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Level1
 {
@@ -51,6 +52,8 @@ namespace Level1
                 _audioSource.PlayOneShot(victory, 0.25f);
                 _speech.Speak("Ihr habt Euren Feind gestürzt!");
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
+
+                SceneManager.LoadScene("Scenes/Level2");
             }
         }
 
