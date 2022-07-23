@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DualPantoFramework;
+using SpeechIO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -87,6 +89,14 @@ namespace Level2
         private void OnApplicationQuit()
         {
             PlayerPrefs.DeleteAll();
+        }
+
+        public async Task WinGame()
+        {
+            _isCurrentlyPaused = true;
+            UpdatePauseState();
+
+            await new SpeechOut().Speak("Ihr habt alle Eurer Widersacher erledigt! Ihr habt gewonnen!", lang: SpeechBase.LANGUAGE.GERMAN);
         }
 
         //Observer infrastructure

@@ -61,8 +61,10 @@ namespace Level2
                 Destroy(_enemy);
                 Destroy(_enemyWeapon);
                 Thread.Sleep((int)(enemyKilled.length * 1000));
-                _speech.Speak("Auch der zweite Gegner ist dank Euch Geschichte!");
+                await _speech.Speak("Auch der zweite Gegner ist dank Euch Geschichte!");
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
+
+                await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
             }
         }
 
