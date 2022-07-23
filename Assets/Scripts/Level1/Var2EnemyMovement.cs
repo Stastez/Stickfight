@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace Level1
 {
-    public class Var2EnemyMovement : MonoBehaviour
+    public class Var2EnemyMovement : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private GameObject _enemy;
         private float _wantedPosition;
         private PlayerScript _playerScript;
+        private bool _isCurrentlyPaused;
 
         private void Start()
         {
@@ -20,7 +21,7 @@ namespace Level1
         //Movement between 1.25f and -3.75f
         void FixedUpdate()
         {
-            if (!_playerScript.isIntroDone) return;
+            if (!_playerScript.isIntroDone || _isCurrentlyPaused) return;
 
             var currentPosition = _enemy.transform.position.z;
 
@@ -48,6 +49,22 @@ namespace Level1
             {
                 _enemy.transform.position += new Vector3(0, 0, velocity);
             }
+        }
+        
+        //Observer infrastructure
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(GameManager.GameManagerUpdate value)
+        {
+            _isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }
