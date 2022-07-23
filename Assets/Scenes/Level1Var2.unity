@@ -204,6 +204,50 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f08d327e9fb42f94d97ba9d1d226d418, type: 3}
+--- !u!1 &74468544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 74468546}
+  - component: {fileID: 74468545}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &74468545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74468544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390f5706441def940801ba766c63b26a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &74468546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74468544}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0286541, y: -3.1506462, z: -5.6766796}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &130258877
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +666,6 @@ GameObject:
   - component: {fileID: 710783206}
   - component: {fileID: 710783205}
   - component: {fileID: 710783204}
-  - component: {fileID: 710783203}
   - component: {fileID: 710783208}
   m_Layer: 0
   m_Name: Enemy
@@ -631,20 +674,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &710783203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 710783201}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49ea4b2874f75c40b7bb4e8a4193cc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponPosition: 0
-  weaponSide: 0
 --- !u!65 &710783204
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1237,8 +1266,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playIntro: 1
   isIntroDone: 0
-  weaponPosition: 0
-  weaponSide: 0
 --- !u!65 &1830526603
 BoxCollider:
   m_ObjectHideFlags: 0

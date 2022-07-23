@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
@@ -6,13 +7,14 @@ using UnityEngine.SceneManagement;
 
 namespace Level1
 {
-    public class WeaponScript : MonoBehaviour
+    public class WeaponScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private BoxCollider _ownCollider;
         private GameObject _player, _ownGameObject, _enemy, _enemyWeapon;
         private SpeechOut _speech;
         private AudioSource _audioSource;
         private PantoHandle _itHandle;
+        private bool _isCurrentlyPaused;
 
         public AudioClip enemyKilled, enemyBlocked, victory;
 
@@ -37,33 +39,36 @@ namespace Level1
         {
             GameObject collidedGameObject = collision.collider.gameObject;
 
+            if (_isCurrentlyPaused) return;
+            
             if (collidedGameObject.Equals(_enemy))
             {
-                if (WasHitBlocked())
-                {
-                    _audioSource.PlayOneShot(enemyBlocked);
-                    return;
-                }
-
                 _audioSource.PlayOneShot(enemyKilled);
                 Destroy(_enemy);
                 Destroy(_enemyWeapon);
                 Thread.Sleep((int) (enemyKilled.length * 1000));
                 _audioSource.PlayOneShot(victory, 0.25f);
-                _speech.Speak("Ihr habt Euren Feind gestürzt!");
+                _speech.Speak("Ihr habt Euren Feind gestürzt!", lang: SpeechBase.LANGUAGE.GERMAN);
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
 
                 SceneManager.LoadScene("Scenes/Level2");
             }
         }
-
-        private bool WasHitBlocked()
+        
+        //Observer infrastructure
+        public void OnCompleted()
         {
-            PlayerScript _playerScript = _player.GetComponent<PlayerScript>();
-            EnemyScript _enemyScript = _enemy.GetComponent<EnemyScript>();
+            throw new NotImplementedException();
+        }
 
-            return (_enemyScript.weaponPosition == _playerScript.weaponPosition) &&
-                   (_enemyScript.weaponSide != _playerScript.weaponSide);
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(GameManager.GameManagerUpdate value)
+        {
+            _isCurrentlyPaused = value.isCurrentlyPaused;
         }
     }
 }
