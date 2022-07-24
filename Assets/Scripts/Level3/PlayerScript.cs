@@ -3,7 +3,7 @@ using UnityEngine;
 using DualPantoFramework;
 using UnityEngine.SceneManagement;
 
-namespace Level2
+namespace Level3
 {
     public class PlayerScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
