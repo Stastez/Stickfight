@@ -26,6 +26,7 @@ namespace Level1
             _ownCollider = _ownGameObject.GetComponent<BoxCollider>();
             _enemy = GameObject.Find("Enemy");
             _speech = new SpeechOut();
+            _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
             _enemyWeapon = GameObject.Find("EnemyWeapon");
             _audioSource = _ownGameObject.GetComponent<AudioSource>();
             _player = GameObject.Find("Player");
@@ -50,7 +51,7 @@ namespace Level1
                 Thread.Sleep((int)(enemyKilled.length * 1000));
                 _audioSource.PlayOneShot(victory, 0.25f);
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
-                _speech.Speak("Ihr habt Euren Feind gestürzt!", lang: SpeechBase.LANGUAGE.GERMAN);
+                _speech.Speak("Du hast deinen Feind gestürzt!", lang: SpeechBase.LANGUAGE.GERMAN);
 
                 SceneManager.LoadScene("Scenes/Level2");
             }

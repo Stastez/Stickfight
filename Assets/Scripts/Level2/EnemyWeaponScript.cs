@@ -35,15 +35,21 @@ namespace Level2
             _currentlyInCollision = true;
             _audio.Play();
             _gameManager.StopGame();
-            await _speechOut.Speak("Oh nein! Ihr wurdet ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("Oh nein! Du wurdest ermeuchelt!", lang: SpeechBase.LANGUAGE.GERMAN);
 
             //SpeechIn apparently only recognizes English
-            await _speechOut.Speak("Um das Spiel zu beenden, sagt", lang: SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("Um das Spiel zu beenden, sag", lang: SpeechBase.LANGUAGE.GERMAN);
+            _speechOut.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
             await _speechOut.Speak("Quit");
-            await _speechOut.Speak("Um das Spiel mit Einführung neu zu starten, sagt", lang: SpeechBase.LANGUAGE.GERMAN);
+            _speechOut.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("Um das Spiel mit Einführung neu zu starten, sag", lang: SpeechBase.LANGUAGE.GERMAN);
+            _speechOut.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
             await _speechOut.Speak("Intro");
-            await _speechOut.Speak("um das Spiel ohne Einführung neu zu starten, sagt", lang: SpeechBase.LANGUAGE.GERMAN);
+            _speechOut.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
+            await _speechOut.Speak("um das Spiel ohne Einführung neu zu starten, sag", lang: SpeechBase.LANGUAGE.GERMAN);
+            _speechOut.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
             await _speechOut.Speak("Restart");
+            _speechOut.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
 
             await _speechIn.Listen(new string[] {"Quit", "Intro", "Restart"});
         }

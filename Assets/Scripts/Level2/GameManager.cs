@@ -95,8 +95,9 @@ namespace Level2
         {
             _isCurrentlyPaused = true;
             UpdatePauseState();
-
-            await new SpeechOut().Speak("Ihr habt alle Eurer Widersacher erledigt! Ihr habt gewonnen!", lang: SpeechBase.LANGUAGE.GERMAN);
+            SpeechOut speech = new SpeechOut();
+            speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
+            await speech.Speak("Du hast alle Widersacher erledigt! Du hast gewonnen!", lang: SpeechBase.LANGUAGE.GERMAN);
         }
 
         //Observer infrastructure
