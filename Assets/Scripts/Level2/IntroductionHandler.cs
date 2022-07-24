@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using DualPantoFramework;
 using SpeechIO;
@@ -33,6 +34,8 @@ namespace Level2
             _meHandle = _panto.GetComponent<UpperHandle>();
             _itHandle = _panto.GetComponent<LowerHandle>();
             _speech = new SpeechOut();
+            _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
+
 
             _initialized = true;
         }
@@ -59,54 +62,18 @@ namespace Level2
 
             _player.GetComponent<PlayerScript>().isIntroDone = true;
 
-            _speech.Speak("Ihr könnt Eure Waffe komplett um euch herum drehen:", lang: SpeechBase.LANGUAGE.GERMAN);
+            _meHandle.Freeze();
 
-            _speech.Speak("Aber Vorsicht! Eure Widersacher werden versuchen, Eure Schläge zu parieren!", lang: SpeechBase.LANGUAGE.GERMAN);
             StartCoroutine(nameof(Rotate), _meHandle);
-        }
+            await _speech.Speak("Du kannst deine Waffe komplett um dich herum drehen:");
 
-        /**
-         * Max movement speed is 1.5f
-         */
-        public async Task Wiggle(PantoHandle handle, GameObject reference, WiggleDirection direction, float intensity,
-            float extent)
-        {
-            Vector3 originalPosition = handle.HandlePosition(reference.transform.position);
+            _itHandle.SwitchTo(_enemy, 10f);
 
-            async Task MoveHandle(Vector3 direction, int repetitions)
-            {
-                for (int i = 0; i < repetitions; i++)
-                {
-                    await handle.MoveToPosition(originalPosition + direction * extent, intensity);
-                    await handle.MoveToPosition(originalPosition, handle.MaxMovementSpeed());
-                }
-            }
 
-            switch (direction)
-            {
-                case WiggleDirection.Up:
-                    await MoveHandle(new Vector3(0, 0, 1), 2);
-                    break;
-                case WiggleDirection.Down:
-                    await MoveHandle(new Vector3(0, 0, -1), 2);
-                    break;
-                case WiggleDirection.Left:
-                    await MoveHandle(new Vector3(-1, 0, 0), 2);
-                    break;
-                case WiggleDirection.UpDown:
-                    await MoveHandle(new Vector3(0, 0, 1), 1);
-                    await MoveHandle(new Vector3(0, 0, -1), 1);
-                    break;
-                case WiggleDirection.Right:
-                    await MoveHandle(new Vector3(1, 0, 0), 2);
-                    break;
-                case WiggleDirection.LeftRight:
-                    await MoveHandle(new Vector3(-1, 0, 0), 1);
-                    await MoveHandle(new Vector3(1, 0, 0), 1);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
-            }
+            await _speech.Speak("Aber Vorsicht! Deine Widersacher werden versuchen, die Schläge zu parieren!");
+            await _speech.Speak("Versuch doch ihn von der Seite zu treffen!");
+
+            _meHandle.Free();
         }
 
         private IEnumerator Rotate(PantoHandle handle)

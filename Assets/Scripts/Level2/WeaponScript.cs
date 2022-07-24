@@ -15,7 +15,7 @@ namespace Level2
         private PantoHandle _itHandle;
 
         public AudioClip enemyKilled, enemyBlocked, victory;
-        private bool blocked = false;
+        private bool _blocked = false;
         private bool _isCurrentlyPaused;
 
         private void Start()
@@ -37,10 +37,9 @@ namespace Level2
 
         private void OnCollisionExit(Collision other)
         {
-            GameObject collidedGameObject = other.collider.gameObject;
-            if (collidedGameObject.CompareTag("EnemyWeapon"))
+            if (other.collider.gameObject.Equals(_enemyWeapon))
             {
-                blocked = false;
+                _blocked = false;
             }
         }
 
@@ -49,19 +48,20 @@ namespace Level2
             GameObject collidedGameObject = collision.collider.gameObject;
 
             if (_isCurrentlyPaused) return;
-            
-            if (collidedGameObject.CompareTag("EnemyWeapon"))
+
+            if (collidedGameObject.Equals(_enemyWeapon))
             {
-                blocked = true;
+                _blocked = true;
                 _audioSource.PlayOneShot(enemyBlocked);
             }
-            else if (collidedGameObject.Equals(_enemy) && !blocked)
+            else if (collidedGameObject.Equals(_enemy) && !_blocked)
             {
                 _audioSource.PlayOneShot(enemyKilled);
                 Destroy(_enemy);
                 Destroy(_enemyWeapon);
                 Thread.Sleep((int)(enemyKilled.length * 1000));
-                await _speech.Speak("Auch der zweite Gegner ist dank Euch Geschichte!");
+                await _speech.Speak("Auch der zweite Gegner ist dank dir Geschichte!");
+                _audioSource.PlayOneShot(victory);
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
 
                 await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
