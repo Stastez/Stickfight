@@ -83,6 +83,11 @@ namespace DualPantoFramework
             }
         }
 
+        public void SetHandledGameObject(GameObject newHandled)
+        {
+            handledGameObject = newHandled;
+        }
+
         /// <summary>
         /// Get the current rotation of the handle, use this as the y axis in Unity.
         /// </summary>
