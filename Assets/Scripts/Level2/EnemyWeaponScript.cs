@@ -26,6 +26,12 @@ namespace Level2
             _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
 
+        private void OnApplicationQuit()
+        {
+            _speechOut.Stop();
+            _speechIn.StopListening();
+        }
+
         private async void OnCollisionEnter(Collision collision)
         {
             var otherGameObject = collision.transform.gameObject;
