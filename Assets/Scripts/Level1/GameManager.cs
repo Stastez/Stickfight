@@ -35,7 +35,7 @@ namespace Level1
             _observers = new List<IObserver<GameManagerUpdate>>();
             SubscribeObservers();
             _speechIn = new SpeechIn(OnCommandRecognized);
-            _speechIn.StartListening();
+            _speechIn.StartListening(_commandDictionary);
             _speechOut = new SpeechOut();
             _speechOut.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
             _speechOutEnglish = new SpeechOut();
@@ -118,7 +118,7 @@ namespace Level1
             await new SpeechOut().Speak("Ihr habt alle Eurer Widersacher erledigt! Ihr habt gewonnen!", lang: SpeechBase.LANGUAGE.GERMAN);
         }
 
-        private void OnCommandRecognized(string command)
+        private async void OnCommandRecognized(string command)
         {
             _speechIn.PauseListening();
             
@@ -143,7 +143,7 @@ namespace Level1
                     break;
             }
             
-            _speechIn.StartListening();
+            _speechIn.StartListening(_commandDictionary);
         }
 
         private async void HandlePauseCommand()
