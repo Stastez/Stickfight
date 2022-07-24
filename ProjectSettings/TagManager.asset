@@ -10,6 +10,7 @@ TagManager:
   - MeTrail
   - PerceptionCone
   - EnemyWeapon
+  - Enemy
   layers:
   - Default
   - TransparentFX

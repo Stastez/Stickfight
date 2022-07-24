@@ -10,6 +10,8 @@ namespace Level3
 {
     public class GameManager : MonoBehaviour, IObservable<GameManager.GameManagerUpdate>
     {
+        public GameObject[] enemies;
+        
         public class GameManagerUpdate
         {
             public bool isCurrentlyPaused, isGameOver;
