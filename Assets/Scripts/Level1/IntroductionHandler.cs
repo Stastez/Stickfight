@@ -42,19 +42,17 @@ namespace Level1
 
         private static async Task PlayIntro()
         {
-            await _speech.Speak("Solltest du während des Spielens eine Pause brauchen, so sage:");
-            _speech.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
-            await _speech.Speak("PAUSE");
-            _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
-            await _speech.Speak("Im Pausemenü kannst du dann auch um Hilfe bitten, indem du sagst:");
-            _speech.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
-            await _speech.Speak("HELP");
-            _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
-            await _speech.Speak("Um das Spiel dann fortzusetzen, sage:");
-            _speech.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
-            await _speech.Speak("RESUME");
-            _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
-            
+            if (!(PlayerPrefs.HasKey("playVoiceCommands") && PlayerPrefs.GetInt("playVoiceCommands") == 0))
+            {
+                await _speech.Speak("Solltest du während des Spielens eine Pause brauchen, so sage:");
+                _speech.SetLanguage(SpeechBase.LANGUAGE.ENGLISH);
+                await _speech.Speak("PAUSE");
+                _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
+                await _speech.Speak("Im Pausemenü kannst du dann auch um Hilfe bitten.");
+            }
+
+            PlayerPrefs.SetInt("playVoiceCommands", 0);
+
             _speech.Speak("Das bist du.");
             await _meHandle.MoveToPosition(_player.transform.position);
             
