@@ -2,6 +2,7 @@
 using System.Threading;
 using DualPantoFramework;
 using SpeechIO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,7 @@ namespace Level1
         private AudioSource _audioSource;
         private PantoHandle _itHandle;
         private bool _isCurrentlyPaused;
+        private bool _blocked = false;
 
         public AudioClip enemyKilled, enemyBlocked, victory;
 
@@ -40,21 +42,20 @@ namespace Level1
             GameObject collidedGameObject = collision.collider.gameObject;
 
             if (_isCurrentlyPaused) return;
-            
-            if (collidedGameObject.Equals(_enemy))
+            if (collidedGameObject.Equals(_enemy) && !_blocked)
             {
                 _audioSource.PlayOneShot(enemyKilled);
                 Destroy(_enemy);
                 Destroy(_enemyWeapon);
-                Thread.Sleep((int) (enemyKilled.length * 1000));
+                Thread.Sleep((int)(enemyKilled.length * 1000));
                 _audioSource.PlayOneShot(victory, 0.25f);
-                _speech.Speak("Ihr habt Euren Feind gestürzt!", lang: SpeechBase.LANGUAGE.GERMAN);
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
+                _speech.Speak("Ihr habt Euren Feind gestürzt!", lang: SpeechBase.LANGUAGE.GERMAN);
 
                 SceneManager.LoadScene("Scenes/Level2");
             }
         }
-        
+
         //Observer infrastructure
         public void OnCompleted()
         {
