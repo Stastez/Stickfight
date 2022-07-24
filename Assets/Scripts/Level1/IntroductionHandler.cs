@@ -24,12 +24,14 @@ namespace Level1
 
         private static Level _level = _panto.GetComponent<Level>();
 
-        private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(), _itHandle = _panto.GetComponent<LowerHandle>();
+        private static PantoHandle _meHandle = _panto.GetComponent<UpperHandle>(),
+            _itHandle = _panto.GetComponent<LowerHandle>();
 
         private static SpeechOut _speech = new();
 
         public static async Task Introduce(bool playIntro)
         {
+            _speech.SetLanguage(SpeechBase.LANGUAGE.GERMAN);
             if (playIntro) await PlayIntro();
 
             await _meHandle.MoveToPosition(_player.transform.position);
@@ -40,15 +42,20 @@ namespace Level1
 
         private static async Task PlayIntro()
         {
+            _speech.Speak("Das bist du.");
             await _meHandle.MoveToPosition(_player.transform.position);
 
-            _speech.Speak("Ihr habt ein Schwert!", lang: SpeechBase.LANGUAGE.GERMAN);
-            await Wiggle(_meHandle, _player, WiggleDirection.LeftRight, 0.25f, 1f);
 
+            _speech.Speak("Das ist dein Gegner");
             await _itHandle.MoveToPosition(_enemy.transform.position);
-            
-            _speech.Speak("Stecht den da ab!", lang: SpeechBase.LANGUAGE.GERMAN);
-            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 0.25f, 1f);
+
+            _speech.Speak("Du hast ein Schwert, es zeigt nach rechts.");
+            _meHandle.Rotate(180f);
+            await Wiggle(_meHandle, _player, WiggleDirection.Right, 1f, 1f);
+
+
+            _speech.Speak("Bewege den Stick und versuche den Gegner zu treffen.", lang: SpeechBase.LANGUAGE.GERMAN);
+            await Wiggle(_itHandle, _enemy, WiggleDirection.UpDown, 1.5f, 0.3f);
 
             await Wiggle(_meHandle, _player, WiggleDirection.Right, 0.25f, 1);
         }

@@ -63,7 +63,6 @@ namespace SpeechIO
         public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH)
         {
             SetSpeed(speed);
-            SetLanguage(lang);
             speech.Speak(text);
             while (SpeechBase.isSpeaking)    // now wait until finished speaking
             {
