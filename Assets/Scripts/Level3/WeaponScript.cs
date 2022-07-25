@@ -9,7 +9,7 @@ namespace Level3
     public class WeaponScript : MonoBehaviour, IObserver<GameManager.GameManagerUpdate>
     {
         private BoxCollider _ownCollider;
-        private GameObject _player, _ownGameObject, _enemy, _enemyWeapon;
+        private GameObject _player, _ownGameObject;
         private SpeechOut _speech;
         private AudioSource _audioSource;
         private PantoHandle _itHandle;
@@ -22,9 +22,7 @@ namespace Level3
         {
             _ownGameObject = GameObject.Find("PlayerWeapon");
             _ownCollider = _ownGameObject.GetComponent<BoxCollider>();
-            _enemy = GameObject.Find("Enemy");
             _speech = new SpeechOut();
-            _enemyWeapon = GameObject.Find("EnemyWeapon");
             _audioSource = _ownGameObject.GetComponent<AudioSource>();
             _player = GameObject.Find("Player");
             _itHandle = GameObject.Find("Panto").GetComponent<LowerHandle>();
@@ -37,7 +35,7 @@ namespace Level3
 
         private void OnCollisionExit(Collision other)
         {
-            if (other.collider.gameObject.Equals(_enemyWeapon))
+            if (other.collider.gameObject.CompareTag("EnemyWeapon"))
             {
                 _blocked = false;
             }
@@ -49,22 +47,30 @@ namespace Level3
 
             if (_isCurrentlyPaused) return;
 
-            if (collidedGameObject.Equals(_enemyWeapon))
+            if (collidedGameObject.CompareTag("EnemyWeapon"))
             {
                 _blocked = true;
                 _audioSource.PlayOneShot(enemyBlocked);
             }
-            else if (collidedGameObject.Equals(_enemy) && !_blocked)
+            else if (collidedGameObject.CompareTag("Enemy") && !_blocked)
             {
                 _audioSource.PlayOneShot(enemyKilled);
-                Destroy(_enemy);
-                Destroy(_enemyWeapon);
-                Thread.Sleep((int)(enemyKilled.length * 1000));
-                await _speech.Speak("Auch der zweite Gegner ist dank dir Geschichte!");
-                _audioSource.PlayOneShot(victory);
-                await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
+                var gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                var newArr = new GameObject[gameManager.enemies.Length-1];
+                var count = 0;
+                foreach (GameObject enemy in gameManager.enemies)
+                {
+                    if (enemy != collidedGameObject)
+                    {
+                        newArr[count] = enemy;
+                        count++;
+                    }
+                }
 
-                await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
+                gameManager.enemies = newArr;
+                Destroy(collidedGameObject);
+                if (GameObject.Find("GameManager").GetComponent<GameManager>().enemies.Length == 0)
+                    await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
             }
         }
 

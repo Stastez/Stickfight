@@ -67,10 +67,9 @@ namespace Level3
             StartCoroutine(nameof(Rotate), _meHandle);
             await _speech.Speak("Du kannst deine Waffe komplett um dich herum drehen:");
 
-            _itHandle.SwitchTo(_enemy, 10f);
+            _speech.Speak("Aber Vorsicht! Deine Widersacher werden versuchen, die Schläge zu parieren!");
+            await _itHandle.SwitchTo(_enemy, 10f);
 
-
-            await _speech.Speak("Aber Vorsicht! Deine Widersacher werden versuchen, die Schläge zu parieren!");
             await _speech.Speak("Versuch doch ihn von der Seite zu treffen!");
 
             _meHandle.Free();
