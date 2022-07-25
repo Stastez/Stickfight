@@ -70,7 +70,7 @@ namespace Level3
 
                 gameManager.enemies = newArr;
                 Destroy(collidedGameObject);
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().enemies.Length == 0)
+                if (gameManager.enemies.Length == 0)
                 {
                     if (SceneManager.GetActiveScene().name == "Level3")
                     {
@@ -80,8 +80,12 @@ namespace Level3
                     }
                     else
                     {
-                        await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
+                        await gameManager.WinGame();
                     }
+                }
+                else
+                {
+                    await _itHandle.SwitchTo(gameManager.enemies[0]);
                 }
                     
             }

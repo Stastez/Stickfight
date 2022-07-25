@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Level3
 {
@@ -50,7 +51,7 @@ namespace Level3
             if (!_initialized) Start();
 
             if (playIntro) await PlayIntro();
-            await _itHandle.SwitchTo(_enemy, 50f);
+            await _itHandle.SwitchTo(GameObject.Find("GameManager").GetComponent<GameManager>().enemies[0]);
 
             await _meHandle.MoveToPosition(_player.transform.position);
             _meHandle.FreeRotation();
@@ -61,16 +62,6 @@ namespace Level3
             await _meHandle.MoveToPosition(_player.transform.position);
 
             _player.GetComponent<PlayerScript>().isIntroDone = true;
-
-            _meHandle.Freeze();
-
-            StartCoroutine(nameof(Rotate), _meHandle);
-            await _speech.Speak("Du kannst deine Waffe komplett um dich herum drehen:");
-
-            _speech.Speak("Aber Vorsicht! Deine Widersacher werden versuchen, die Schläge zu parieren!");
-            await _itHandle.SwitchTo(_enemy, 10f);
-
-            await _speech.Speak("Versuch doch ihn von der Seite zu treffen!");
 
             _meHandle.Free();
         }
