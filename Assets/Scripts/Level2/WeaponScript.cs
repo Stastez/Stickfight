@@ -3,6 +3,7 @@ using System.Threading;
 using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Level2
 {
@@ -64,7 +65,7 @@ namespace Level2
                 _audioSource.PlayOneShot(victory);
                 await _itHandle.MoveToPosition(new Vector3(0, 0, 0));
 
-                await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
+                SceneManager.LoadScene("Scenes/Level3");
             }
         }
 

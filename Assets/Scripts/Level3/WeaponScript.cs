@@ -3,6 +3,7 @@ using System.Threading;
 using DualPantoFramework;
 using SpeechIO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Level3
 {
@@ -70,7 +71,19 @@ namespace Level3
                 gameManager.enemies = newArr;
                 Destroy(collidedGameObject);
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().enemies.Length == 0)
-                    await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
+                {
+                    if (SceneManager.GetActiveScene().name == "Level3")
+                    {
+                        _speech.Speak("Auch der dritte Gegner ist dank dir kaputt!");
+                        _audioSource.PlayOneShot(victory);
+                        SceneManager.LoadScene("Scenes/Level4");
+                    }
+                    else
+                    {
+                        await GameObject.Find("GameManager").GetComponent<GameManager>().WinGame();
+                    }
+                }
+                    
             }
         }
 
